@@ -110,8 +110,11 @@ function! mkdp#util#open_terminal(opts) abort
   let bufnr = bufnr('%')
   let Callback = get(a:opts, 'Callback', v:null)
   if has('nvim')
-    let cmd_list = type(cmd) ==# 1 ? split(cmd) : cmd
+    let cmd_list = type(cmd) ==# 1 ? split(cmd) : copy(cmd)
     if has('nvim-0.11')
+      if !empty(cwd) && cmd_list[0] =~# '^\.\{1,2\}/'
+        let cmd_list[0] = cwd . '/' . cmd_list[0]
+      endif
       let opts = {
             \ 'term': v:true,
             \ 'on_exit': function('s:on_exit', [autoclose, bufnr, Callback]),
