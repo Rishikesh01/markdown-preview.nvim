@@ -1,8 +1,7 @@
-// change cwd to ./app
-if (!/^(\/|C:\\)snapshot/.test(__dirname)) {
-  process.chdir(__dirname)
-} else {
-  process.chdir(process.execPath.replace(/(markdown-preview.nvim.*?app).+?$/, '$1'))
+if (process.argv[2] === '--version') {
+  // Keep in sync with the root package.json version.
+  console.log('0.0.10')
+  process.exit(0)
 }
 
-require('./lib/app')
+require('./server').run()

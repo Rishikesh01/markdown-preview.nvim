@@ -12,5 +12,18 @@
     "@chemzqm/neovim": "^5.7.9",
     "socket.io": "2.4.0",
     "tslib": "1.9.3"
+  },
+  "pkg": {
+    "scripts": [
+      "lib/attach/*.js",
+      "lib/util/*.js",
+      "server.js",
+      "routes.js",
+      "nvim.js"
+    ],
+    "assets": [
+      "out/**",
+      "_static/**"
+    ]
   }
 }

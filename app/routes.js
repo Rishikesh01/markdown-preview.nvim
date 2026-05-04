@@ -11,7 +11,7 @@ const use = function (route) {
 // /page/:number
 use((req, res, next) => {
   if (/\/page\/\d+/.test(req.asPath)) {
-    return fs.createReadStream('./out/index.html').pipe(res)
+    return fs.createReadStream(path.join(__dirname, 'out', 'index.html')).pipe(res)
   }
   next()
 })
@@ -19,7 +19,7 @@ use((req, res, next) => {
 // /_next/path
 use((req, res, next) => {
   if (/\/_next/.test(req.asPath)) {
-    return fs.createReadStream(path.join('./out', req.asPath)).pipe(res)
+    return fs.createReadStream(path.join(__dirname, 'out', req.asPath)).pipe(res)
   }
   next()
 })
@@ -46,7 +46,7 @@ use((req, res, next) => {
 // /_static/path
 use((req, res, next) => {
   if (/\/_static/.test(req.asPath)) {
-    const fpath = path.join('./', req.asPath)
+    const fpath = path.join(__dirname, req.asPath)
     if (fs.existsSync(fpath)) {
       return fs.createReadStream(fpath).pipe(res)
     } else {
@@ -123,7 +123,7 @@ use(async (req, res, next) => {
 // 404
 use((req, res) => {
   res.statusCode = 404
-  return fs.createReadStream(path.join('./out', '404.html')).pipe(res)
+  return fs.createReadStream(path.join(__dirname, 'out', '404.html')).pipe(res)
 })
 
 module.exports = function (req, res, next) {

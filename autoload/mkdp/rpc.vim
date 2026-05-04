@@ -40,10 +40,10 @@ endfunction
 function! mkdp#rpc#start_server() abort
   let l:mkdp_server_script = s:mkdp_root_dir . '/app/bin/markdown-preview-' . mkdp#util#get_platform()
   if executable(l:mkdp_server_script)
-    let l:cmd = [l:mkdp_server_script, '--path', s:mkdp_root_dir . '/app/server.js']
+    let l:cmd = [l:mkdp_server_script]
   elseif executable('node')
     let l:mkdp_server_script = s:mkdp_root_dir . '/app/index.js'
-    let l:cmd = ['node', l:mkdp_server_script, '--path', s:mkdp_root_dir . '/app/server.js']
+    let l:cmd = ['node', l:mkdp_server_script]
   endif
   if exists('l:cmd')
     if s:is_vim
