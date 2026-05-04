@@ -106,15 +106,28 @@ function! mkdp#util#open_terminal(opts) abort
     throw 'command required!'
   endif
   let cwd = get(a:opts, 'cwd', '')
-  if !empty(cwd) | execute 'lcd '.cwd | endif
   let keepfocus = get(a:opts, 'keepfocus', 0)
   let bufnr = bufnr('%')
   let Callback = get(a:opts, 'Callback', v:null)
   if has('nvim')
-    call termopen(cmd, {
-          \ 'on_exit': function('s:on_exit', [autoclose, bufnr, Callback]),
-          \})
+    let cmd_list = type(cmd) ==# 1 ? split(cmd) : cmd
+    if has('nvim-0.11')
+      let opts = {
+            \ 'term': v:true,
+            \ 'on_exit': function('s:on_exit', [autoclose, bufnr, Callback]),
+            \}
+      if !empty(cwd)
+        let opts.cwd = cwd
+      endif
+      call jobstart(cmd_list, opts)
+    else
+      if !empty(cwd) | execute 'lcd '.cwd | endif
+      call termopen(cmd_list, {
+            \ 'on_exit': function('s:on_exit', [autoclose, bufnr, Callback]),
+            \})
+    endif
   else
+    if !empty(cwd) | execute 'lcd '.cwd | endif
     call term_start(cmd, {
           \ 'exit_cb': function('s:on_exit', [autoclose, bufnr, Callback]),
           \ 'curwin': 1,
